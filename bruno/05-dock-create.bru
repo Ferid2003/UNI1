@@ -1,0 +1,32 @@
+meta {
+  name: Create dock
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/docks
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "dockNumber": 1,
+    "status": "AVAILABLE",
+    "stationId": {{stationId}}
+  }
+}
+
+script:post-response {
+  bru.setVar("dockId", res.body.id);
+}
+
+tests {
+  test("status 201", function () {
+    expect(res.status).to.equal(201);
+  });
+  test("has id", function () {
+    expect(res.body.id !== undefined).to.be.true;
+  });
+}

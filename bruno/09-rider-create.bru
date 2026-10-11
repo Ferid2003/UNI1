@@ -1,0 +1,42 @@
+meta {
+  name: Create rider
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/api/riders
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "firstName": "Ada",
+    "lastName": "Lovelace",
+    "email": "ada{{run}}@example.com",
+    "passwordHash": "hash",
+    "phone": "{{run}}",
+    "membershipType": "MONTHLY"
+  }
+}
+
+script:pre-request {
+  bru.setVar("run", Date.now());
+}
+
+script:post-response {
+  bru.setVar("riderId", res.body.id);
+}
+
+tests {
+  test("status 201", function () {
+    expect(res.status).to.equal(201);
+  });
+  test("has id", function () {
+    expect(res.body.id !== undefined).to.be.true;
+  });
+  test("passwordHash not exposed", function () {
+    expect(res.body.passwordHash === undefined).to.be.true;
+  });
+}

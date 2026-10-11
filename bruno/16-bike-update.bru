@@ -1,0 +1,29 @@
+meta {
+  name: Update bike
+  type: http
+  seq: 16
+}
+
+put {
+  url: {{baseUrl}}/api/bikes/{{bikeId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "serialNumber": "SN-{{run}}",
+    "bikeType": "ELECTRIC",
+    "statusCharacter": "MAINTENANCE",
+    "currentDockId": {{dockId}}
+  }
+}
+
+tests {
+  test("status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+  test("field updated", function () {
+    expect(res.body.statusCharacter === "MAINTENANCE").to.be.true;
+  });
+}

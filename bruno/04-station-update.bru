@@ -1,0 +1,30 @@
+meta {
+  name: Update station
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/stations/{{stationId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Central Updated",
+    "address": "1 Main St",
+    "latitude": 41.311081,
+    "longitude": 69.240562,
+    "isActive": false
+  }
+}
+
+tests {
+  test("status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+  test("field updated", function () {
+    expect(res.body.name === "Central Updated").to.be.true;
+  });
+}

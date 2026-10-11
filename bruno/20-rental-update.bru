@@ -1,0 +1,31 @@
+meta {
+  name: Update rental
+  type: http
+  seq: 20
+}
+
+put {
+  url: {{baseUrl}}/api/rentals/{{rentalId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "bikeId": {{bikeId}},
+    "riderId": {{riderId}},
+    "startDockId": {{dockId}},
+    "endDockId": {{dockId}},
+    "endTime": "2099-01-01T00:00:00Z",
+    "cost": 5.5
+  }
+}
+
+tests {
+  test("status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+  test("field updated", function () {
+    expect(res.body.endDockId === bru.getVar("dockId")).to.be.true;
+  });
+}

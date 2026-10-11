@@ -1,0 +1,33 @@
+meta {
+  name: Create bike
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/api/bikes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "serialNumber": "SN-{{run}}",
+    "bikeType": "ELECTRIC",
+    "statusCharacter": "AVAILABLE",
+    "currentDockId": {{dockId}}
+  }
+}
+
+script:post-response {
+  bru.setVar("bikeId", res.body.id);
+}
+
+tests {
+  test("status 201", function () {
+    expect(res.status).to.equal(201);
+  });
+  test("has id", function () {
+    expect(res.body.id !== undefined).to.be.true;
+  });
+}

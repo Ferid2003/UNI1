@@ -1,0 +1,20 @@
+meta {
+  name: List docks
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/docks
+  body: none
+  auth: none
+}
+
+tests {
+  test("status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+  test("returns an array", function () {
+    expect(Array.isArray(res.body)).to.be.true;
+  });
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Update rider
+  type: http
+  seq: 12
+}
+
+put {
+  url: {{baseUrl}}/api/riders/{{riderId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "firstName": "Ada",
+    "lastName": "Byron",
+    "email": "ada{{run}}@example.com",
+    "passwordHash": "hash",
+    "phone": "{{run}}",
+    "membershipType": "ANNUAL"
+  }
+}
+
+tests {
+  test("status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+  test("field updated", function () {
+    expect(res.body.lastName === "Byron").to.be.true;
+  });
+}

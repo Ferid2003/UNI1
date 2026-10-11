@@ -1,0 +1,17 @@
+meta {
+  name: Delete rental
+  type: http
+  seq: 21
+}
+
+delete {
+  url: {{baseUrl}}/api/rentals/{{rentalId}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("status 204", function () {
+    expect(res.status).to.equal(204);
+  });
+}

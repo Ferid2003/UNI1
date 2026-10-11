@@ -1,0 +1,17 @@
+meta {
+  name: Delete dock
+  type: http
+  seq: 24
+}
+
+delete {
+  url: {{baseUrl}}/api/docks/{{dockId}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("status 204", function () {
+    expect(res.status).to.equal(204);
+  });
+}

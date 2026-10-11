@@ -1,0 +1,35 @@
+meta {
+  name: Create rental
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{baseUrl}}/api/rentals
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "bikeId": {{bikeId}},
+    "riderId": {{riderId}},
+    "startDockId": {{dockId}},
+    "endDockId": null,
+    "endTime": null,
+    "cost": null
+  }
+}
+
+script:post-response {
+  bru.setVar("rentalId", res.body.id);
+}
+
+tests {
+  test("status 201", function () {
+    expect(res.status).to.equal(201);
+  });
+  test("has id", function () {
+    expect(res.body.id !== undefined).to.be.true;
+  });
+}

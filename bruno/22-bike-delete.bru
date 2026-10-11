@@ -1,0 +1,17 @@
+meta {
+  name: Delete bike
+  type: http
+  seq: 22
+}
+
+delete {
+  url: {{baseUrl}}/api/bikes/{{bikeId}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("status 204", function () {
+    expect(res.status).to.equal(204);
+  });
+}

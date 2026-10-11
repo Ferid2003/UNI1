@@ -1,0 +1,20 @@
+meta {
+  name: Get rental
+  type: http
+  seq: 19
+}
+
+get {
+  url: {{baseUrl}}/api/rentals/{{rentalId}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+  test("returns created id", function () {
+    expect(res.body.id === bru.getVar("rentalId")).to.be.true;
+  });
+}

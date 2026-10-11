@@ -1,0 +1,20 @@
+meta {
+  name: Get bike
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/api/bikes/{{bikeId}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("status 200", function () {
+    expect(res.status).to.equal(200);
+  });
+  test("returns created id", function () {
+    expect(res.body.id === bru.getVar("bikeId")).to.be.true;
+  });
+}

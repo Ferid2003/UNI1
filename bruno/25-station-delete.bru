@@ -1,0 +1,17 @@
+meta {
+  name: Delete station
+  type: http
+  seq: 25
+}
+
+delete {
+  url: {{baseUrl}}/api/stations/{{stationId}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("status 204", function () {
+    expect(res.status).to.equal(204);
+  });
+}
