@@ -76,11 +76,29 @@ classDiagram
     RentalRepository ..> Rental
 
     %% ---------- Services ----------
-    class StationService { findAll() findById(id) create(req) update(id, req) delete(id) }
-    class DockService { findAll() findById(id) create(req) update(id, req) delete(id) }
-    class BikeService { findAll() findById(id) create(req) update(id, req) delete(id) }
-    class RiderService { findAll() findById(id) create(req) update(id, req) delete(id) }
-    class RentalService { findAll() findById(id) create(req) update(id, req) delete(id) }
+    class AbstractCrudService~E, REQ, RES~ {
+        <<abstract>>
+        #JpaRepository~E, Integer~ repo
+        +findAll() List~RES~
+        +findById(id) RES
+        +create(req) RES
+        +update(id, req) RES
+        +delete(id)
+        #get(id) E
+        #apply(entity, req)* E
+        #toResponse(entity)* RES
+    }
+    class StationService
+    class DockService
+    class BikeService
+    class RiderService
+    class RentalService
+
+    AbstractCrudService <|-- StationService : E=Station
+    AbstractCrudService <|-- DockService : E=Dock
+    AbstractCrudService <|-- BikeService : E=Bike
+    AbstractCrudService <|-- RiderService : E=Rider
+    AbstractCrudService <|-- RentalService : E=Rental
 
     StationService --> StationRepository
     DockService --> DockRepository
@@ -94,11 +112,26 @@ classDiagram
     RentalService --> DockRepository
 
     %% ---------- Controllers ----------
+    class AbstractCrudController~REQ, RES~ {
+        <<abstract>>
+        +findAll() List~RES~
+        +findById(id) RES
+        +create(req) RES
+        +update(id, req) RES
+        +delete(id)
+    }
     class StationController { <<RestController>> }
     class DockController { <<RestController>> }
     class BikeController { <<RestController>> }
     class RiderController { <<RestController>> }
     class RentalController { <<RestController>> }
+
+    AbstractCrudController --> AbstractCrudService
+    AbstractCrudController <|-- StationController
+    AbstractCrudController <|-- DockController
+    AbstractCrudController <|-- BikeController
+    AbstractCrudController <|-- RiderController
+    AbstractCrudController <|-- RentalController
 
     StationController --> StationService
     DockController --> DockService
