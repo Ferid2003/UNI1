@@ -4,13 +4,13 @@ import org.springframework.web.bind.annotation.*;
 
 import adnsu.project.city_bike.dto.RiderRequest;
 import adnsu.project.city_bike.dto.RiderResponse;
-import adnsu.project.city_bike.service.RiderService;
+import adnsu.project.city_bike.service.AbstractCrudService;
 
 @RestController
 @RequestMapping("/api/riders")
 public class RiderController extends AbstractCrudController<RiderRequest, RiderResponse> {
 
-    public RiderController(RiderService service) {
+    public RiderController(AbstractCrudService<?, RiderRequest, RiderResponse> service) {
         super(service);
     }
 }

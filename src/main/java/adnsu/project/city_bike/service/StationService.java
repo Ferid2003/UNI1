@@ -1,16 +1,16 @@
 package adnsu.project.city_bike.service;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import adnsu.project.city_bike.entity.Station;
 import adnsu.project.city_bike.dto.StationRequest;
 import adnsu.project.city_bike.dto.StationResponse;
-import adnsu.project.city_bike.repository.StationRepository;
 
 @Service
 public class StationService extends AbstractCrudService<Station, StationRequest, StationResponse> {
 
-    public StationService(StationRepository repo) {
+    public StationService(JpaRepository<Station, Integer> repo) {
         super(repo, "Station", Station::new);
     }
 

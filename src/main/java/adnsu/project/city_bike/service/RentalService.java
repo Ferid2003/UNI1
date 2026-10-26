@@ -1,24 +1,24 @@
 package adnsu.project.city_bike.service;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import adnsu.project.city_bike.entity.Dock;
 import adnsu.project.city_bike.entity.Rental;
+import adnsu.project.city_bike.entity.Rider;
+import adnsu.project.city_bike.entity.Bike;
 import adnsu.project.city_bike.dto.RentalRequest;
 import adnsu.project.city_bike.dto.RentalResponse;
-import adnsu.project.city_bike.repository.BikeRepository;
-import adnsu.project.city_bike.repository.DockRepository;
-import adnsu.project.city_bike.repository.RentalRepository;
-import adnsu.project.city_bike.repository.RiderRepository;
 
 @Service
 public class RentalService extends AbstractCrudService<Rental, RentalRequest, RentalResponse> {
 
-    private final BikeRepository bikes;
-    private final RiderRepository riders;
-    private final DockRepository docks;
+    private final JpaRepository<Bike, Integer> bikes;
+    private final JpaRepository<Rider, Integer> riders;
+    private final JpaRepository<Dock, Integer> docks;
 
-    public RentalService(RentalRepository repo, BikeRepository bikes, RiderRepository riders, DockRepository docks) {
+    public RentalService(JpaRepository<Rental, Integer> repo, JpaRepository<Bike, Integer> bikes,
+            JpaRepository<Rider, Integer> riders, JpaRepository<Dock, Integer> docks) {
         super(repo, "Rental", Rental::new);
         this.bikes = bikes;
         this.riders = riders;
@@ -27,8 +27,8 @@ public class RentalService extends AbstractCrudService<Rental, RentalRequest, Re
 
     @Override
     protected Rental apply(Rental x, RentalRequest r) {
-        x.setBike(Found.of(bikes.findById(r.bikeId()), "Bike", r.bikeId()));
-        x.setRider(Found.of(riders.findById(r.riderId()), "Rider", r.riderId()));
+        x.setBike(Found.of(bikes, "Bike", r.bikeId()));
+        x.setRider(Found.of(riders, "Rider", r.riderId()));
         x.setStartDock(dock(r.startDockId()));
         x.setEndDock(r.endDockId() == null ? null : dock(r.endDockId()));
         x.setEndTime(r.endTime());
@@ -37,7 +37,7 @@ public class RentalService extends AbstractCrudService<Rental, RentalRequest, Re
     }
 
     private Dock dock(Integer id) {
-        return Found.of(docks.findById(id), "Dock", id);
+        return Found.of(docks, "Dock", id);
     }
 
     @Override

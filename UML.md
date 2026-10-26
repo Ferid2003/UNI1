@@ -1,6 +1,6 @@
 # City Bike – UML Class Diagram
 
-Renders on GitHub (Mermaid). Layers: controller → service → repository → entity; DTOs cross the controller/service boundary.
+Renders on GitHub (Mermaid). Layers: controller → service → repository → entity (controllers depend only on `AbstractCrudService`, services only on `JpaRepository`); DTOs cross the controller/service boundary.
 
 ```mermaid
 classDiagram
@@ -63,11 +63,18 @@ classDiagram
     Rider ..> MembershipType
 
     %% ---------- Repositories ----------
+    class JpaRepository~E, Integer~ { <<interface>> }
     class StationRepository { <<interface>> }
     class DockRepository { <<interface>> }
     class BikeRepository { <<interface>> }
     class RiderRepository { <<interface>> }
     class RentalRepository { <<interface>> }
+
+    JpaRepository <|-- StationRepository
+    JpaRepository <|-- DockRepository
+    JpaRepository <|-- BikeRepository
+    JpaRepository <|-- RiderRepository
+    JpaRepository <|-- RentalRepository
 
     StationRepository ..> Station
     DockRepository ..> Dock
@@ -100,16 +107,10 @@ classDiagram
     AbstractCrudService <|-- RiderService : E=Rider
     AbstractCrudService <|-- RentalService : E=Rental
 
-    StationService --> StationRepository
-    DockService --> DockRepository
-    DockService --> StationRepository
-    BikeService --> BikeRepository
-    BikeService --> DockRepository
-    RiderService --> RiderRepository
-    RentalService --> RentalRepository
-    RentalService --> BikeRepository
-    RentalService --> RiderRepository
-    RentalService --> DockRepository
+    AbstractCrudService --> JpaRepository : repo
+    DockService --> JpaRepository : stations
+    BikeService --> JpaRepository : docks
+    RentalService --> JpaRepository : bikes, riders, docks
 
     %% ---------- Controllers ----------
     class AbstractCrudController~REQ, RES~ {
@@ -132,12 +133,6 @@ classDiagram
     AbstractCrudController <|-- BikeController
     AbstractCrudController <|-- RiderController
     AbstractCrudController <|-- RentalController
-
-    StationController --> StationService
-    DockController --> DockService
-    BikeController --> BikeService
-    RiderController --> RiderService
-    RentalController --> RentalService
 
     %% ---------- DTOs (one Request + Response per entity) ----------
     class StationDTOs { StationRequest StationResponse }

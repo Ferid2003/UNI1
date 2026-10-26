@@ -42,7 +42,7 @@ public abstract class AbstractCrudService<E, REQ, RES> {
     }
 
     protected E get(Integer id) {
-        return Found.of(repo.findById(id), name, id);
+        return Found.of(repo, name, id);
     }
 
     protected abstract E apply(E entity, REQ r);

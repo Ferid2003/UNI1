@@ -1,19 +1,19 @@
 package adnsu.project.city_bike.service;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import adnsu.project.city_bike.entity.Bike;
+import adnsu.project.city_bike.entity.Dock;
 import adnsu.project.city_bike.dto.BikeRequest;
 import adnsu.project.city_bike.dto.BikeResponse;
-import adnsu.project.city_bike.repository.BikeRepository;
-import adnsu.project.city_bike.repository.DockRepository;
 
 @Service
 public class BikeService extends AbstractCrudService<Bike, BikeRequest, BikeResponse> {
 
-    private final DockRepository docks;
+    private final JpaRepository<Dock, Integer> docks;
 
-    public BikeService(BikeRepository repo, DockRepository docks) {
+    public BikeService(JpaRepository<Bike, Integer> repo, JpaRepository<Dock, Integer> docks) {
         super(repo, "Bike", Bike::new);
         this.docks = docks;
     }
@@ -24,7 +24,7 @@ public class BikeService extends AbstractCrudService<Bike, BikeRequest, BikeResp
         b.setBikeType(r.bikeType());
         b.setStatusCharacter(r.statusCharacter());
         b.setCurrentDock(r.currentDockId() == null ? null
-                : Found.of(docks.findById(r.currentDockId()), "Dock", r.currentDockId()));
+                : Found.of(docks, "Dock", r.currentDockId()));
         return b;
     }
 
